@@ -1,0 +1,6 @@
+# .env file
+.env
+
+# go module
+go.mod
+go.sum

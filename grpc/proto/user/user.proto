@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+package user;
+
+service UserService {
+    rpc FindByID(FindByIDRequest) returns (FindByIDResponse){}
+}
+
+message User {
+    string id =1 [json_name = "_id"];
+    string username = 2;
+    string fullname = 3;
+    string password = 4;
+    string email = 5;
+    string phone = 6;
+    string role = 7;
+}
+
+message FindByIDRequest{
+    string userID = 1;
+}
+
+message FindByIDResponse{
+    User user =1;
+}
