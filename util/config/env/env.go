@@ -15,3 +15,7 @@ func GetMongoURI() string {
 func GetMogoDBName() string {
 	return os.Getenv("MONGO_DB_NAME")
 }
+
+func GetGRPCPortEnv() string {
+	return os.Getenv("GRPC_PORT")
+}

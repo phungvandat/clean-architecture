@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -11,6 +12,7 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/joho/godotenv"
 	"github.com/phungvandat/identity-service/endpoints"
+	serviceGrpc "github.com/phungvandat/identity-service/grpc"
 	serviceHttp "github.com/phungvandat/identity-service/http"
 	"github.com/phungvandat/identity-service/service"
 	userSvc "github.com/phungvandat/identity-service/service/user"
@@ -18,6 +20,7 @@ import (
 	userUseCase "github.com/phungvandat/identity-service/service/user/usecase"
 	mongoDB "github.com/phungvandat/identity-service/util/config/db/mongo"
 	envConfig "github.com/phungvandat/identity-service/util/config/env"
+	"google.golang.org/grpc"
 )
 
 func main() {
@@ -72,10 +75,12 @@ func main() {
 	)
 	defer closeMongoDB()
 
+	endpoints := endpoints.MakeServerEndpoints(s)
+
 	var h http.Handler
 	{
 		h = serviceHttp.NewHTTPHandler(
-			endpoints.MakeServerEndpoints(s),
+			endpoints,
 			logger,
 		)
 	}
@@ -91,6 +96,30 @@ func main() {
 		logger.Log("transport", "HTTP", "addr", httpAddr)
 		errs <- http.ListenAndServe(httpAddr, h)
 
+	}()
+
+	// grpc server
+	portGRPC := "4001"
+	if envConfig.GetGRPCPortEnv() != "" {
+		portGRPC = envConfig.GetGRPCPortEnv()
+	}
+	var (
+		grpcServer = grpc.NewServer()
+		grpcAddr   = fmt.Sprintf(":%v", portGRPC)
+	)
+	serviceGrpc.NewGRPCHandler(
+		endpoints,
+		logger,
+		grpcServer,
+	)
+
+	go func() {
+		lis, err := net.Listen("tcp", grpcAddr)
+		if err != nil {
+			errs <- err
+		}
+		logger.Log("transport", "GRPC", "addr", grpcAddr)
+		errs <- grpcServer.Serve(lis)
 	}()
 
 	logger.Log("exit", <-errs)
