@@ -12,7 +12,7 @@ import (
 )
 
 const (
-	mongURI = "mongodb://localhost:27017"
+	mongURI = "mongodb://localhost:27018"
 	dbName  = "test"
 )
 

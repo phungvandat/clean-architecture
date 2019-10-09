@@ -1,5 +1,8 @@
 # identity-service
 
+# HOW TO SETUP DB
+`docker-compose -f docker-compose-local.yaml up -d`
+
 # HOW TO RUN
 `cat .env.example > .env`
 `make dev`
