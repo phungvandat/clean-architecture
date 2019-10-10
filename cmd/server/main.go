@@ -115,6 +115,7 @@ func main() {
 
 	go func() {
 		lis, err := net.Listen("tcp", grpcAddr)
+		defer lis.Close()
 		if err != nil {
 			errs <- err
 		}

@@ -5,5 +5,6 @@ import (
 )
 
 type UserEndpoint struct {
-	FindByID endpoint.Endpoint
+	FindByID              endpoint.Endpoint
+	TestAddTranslateQuery endpoint.Endpoint
 }

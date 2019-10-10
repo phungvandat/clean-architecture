@@ -9,4 +9,5 @@ import (
 
 type Service interface {
 	FindByID(ctx context.Context, req request.FindByID) (*response.FindByID, error)
+	TestAddTranslateQuery(ctx context.Context, req request.TestAddTranslateQuery) (*response.TestAddTranslateQuery, error)
 }

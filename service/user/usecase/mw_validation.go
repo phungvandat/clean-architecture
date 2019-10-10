@@ -33,3 +33,7 @@ func (mw validationMiddleware) FindByID(ctx context.Context, req request.FindByI
 
 	return mw.Service.FindByID(ctx, req)
 }
+
+func (mw validationMiddleware) TestAddTranslateQuery(ctx context.Context, req request.TestAddTranslateQuery) (*response.TestAddTranslateQuery, error) {
+	return mw.Service.TestAddTranslateQuery(ctx, req)
+}

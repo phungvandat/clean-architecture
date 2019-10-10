@@ -2,9 +2,12 @@ package repository
 
 import (
 	"context"
+	"encoding/json"
+	"fmt"
 
 	"github.com/phungvandat/identity-service/model/domain"
 	"github.com/phungvandat/identity-service/util/constants"
+	"github.com/phungvandat/identity-service/util/engine"
 	"github.com/phungvandat/identity-service/util/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -46,4 +49,28 @@ func (repo *mongoUserRepo) FindByID(ctx context.Context, id string) (*domain.Use
 	}
 
 	return user, nil
+}
+
+func (repo *mongoUserRepo) TestAddTranslateQuery(ctx context.Context, query *engine.Query) ([]*domain.User, error) {
+	users := []*domain.User{}
+	userCollection := repo.mongoDB.Collection(constants.MongoUserCollection)
+
+	filter := engine.TranslateQueryToMongoFilter(query)
+	x, _ := json.Marshal(filter)
+	fmt.Println(string(x))
+	cursors, err := userCollection.Find(ctx, filter)
+
+	if err != nil {
+		return nil, err
+	}
+
+	for cursors.Next(ctx) {
+		user := &domain.User{}
+		err = cursors.Decode(user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+	return users, nil
 }
