@@ -16,7 +16,8 @@ func MakeServerEndpoints(s service.Service) Endpoints {
 	return Endpoints{
 		IndexEndpoint: index.MakeIndexEndpoints(),
 		UserEndpoint: user.UserEndpoint{
-			FindByID: user.MakeFindByIDEndpoint(s),
+			FindByID:              user.MakeFindByIDEndpoint(s),
+			TestAddTranslateQuery: user.MakeTestAddTranslateQuery(s),
 		},
 	}
 }
