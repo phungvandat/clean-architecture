@@ -1,6 +1,6 @@
 # CLEAN ARCHITECTURE
 
-![clean architecture](https://github.com/phungvandat/clean-architecture/images/clean-arch.png)
+![clean architecture](https://raw.githubusercontent.com/phungvandat/clean-architecture/dev/images/clean-arch.png)
 
 # HOW TO SETUP DB
 `docker-compose -f docker-compose-local.yaml up -d`
