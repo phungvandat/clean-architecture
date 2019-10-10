@@ -5,9 +5,9 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/phungvandat/identity-service/model/request"
-	"github.com/phungvandat/identity-service/model/response"
-	"github.com/phungvandat/identity-service/util/errors"
+	"github.com/phungvandat/clean-architecture/model/request"
+	"github.com/phungvandat/clean-architecture/model/response"
+	"github.com/phungvandat/clean-architecture/util/errors"
 	"github.com/stretchr/testify/mock"
 )
 

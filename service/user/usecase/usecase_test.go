@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/phungvandat/identity-service/model/domain"
-	"github.com/phungvandat/identity-service/model/request"
-	"github.com/phungvandat/identity-service/model/response"
-	userRepo "github.com/phungvandat/identity-service/service/user/repository"
+	"github.com/phungvandat/clean-architecture/model/domain"
+	"github.com/phungvandat/clean-architecture/model/request"
+	"github.com/phungvandat/clean-architecture/model/response"
+	userRepo "github.com/phungvandat/clean-architecture/service/user/repository"
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )

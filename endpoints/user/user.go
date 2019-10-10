@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/go-kit/kit/endpoint"
-	userReq "github.com/phungvandat/identity-service/model/request"
-	"github.com/phungvandat/identity-service/service"
+	userReq "github.com/phungvandat/clean-architecture/model/request"
+	"github.com/phungvandat/clean-architecture/service"
 )
 
 func MakeFindByIDEndpoint(s service.Service) endpoint.Endpoint {

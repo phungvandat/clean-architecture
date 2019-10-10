@@ -3,8 +3,8 @@ package user
 import (
 	"context"
 
-	"github.com/phungvandat/identity-service/model/request"
-	"github.com/phungvandat/identity-service/model/response"
+	"github.com/phungvandat/clean-architecture/model/request"
+	"github.com/phungvandat/clean-architecture/model/response"
 )
 
 type Service interface {

@@ -2,9 +2,9 @@ package endpoints
 
 import (
 	"github.com/go-kit/kit/endpoint"
-	"github.com/phungvandat/identity-service/endpoints/index"
-	"github.com/phungvandat/identity-service/endpoints/user"
-	"github.com/phungvandat/identity-service/service"
+	"github.com/phungvandat/clean-architecture/endpoints/index"
+	"github.com/phungvandat/clean-architecture/endpoints/user"
+	"github.com/phungvandat/clean-architecture/service"
 )
 
 type Endpoints struct {

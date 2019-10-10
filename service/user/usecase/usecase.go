@@ -3,11 +3,11 @@ package usecase
 import (
 	"context"
 
-	"github.com/phungvandat/identity-service/model/request"
-	"github.com/phungvandat/identity-service/model/response"
-	userService "github.com/phungvandat/identity-service/service/user"
-	userRepo "github.com/phungvandat/identity-service/service/user/repository"
-	"github.com/phungvandat/identity-service/util/engine"
+	"github.com/phungvandat/clean-architecture/model/request"
+	"github.com/phungvandat/clean-architecture/model/response"
+	userService "github.com/phungvandat/clean-architecture/service/user"
+	userRepo "github.com/phungvandat/clean-architecture/service/user/repository"
+	"github.com/phungvandat/clean-architecture/util/engine"
 )
 
 type userUsecase struct {

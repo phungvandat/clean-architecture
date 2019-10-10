@@ -1,7 +1,7 @@
 package response
 
 import (
-	"github.com/phungvandat/identity-service/model/domain"
+	"github.com/phungvandat/clean-architecture/model/domain"
 )
 
 type FindByID struct {

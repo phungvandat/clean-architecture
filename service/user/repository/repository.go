@@ -3,8 +3,8 @@ package repository
 import (
 	"context"
 
-	"github.com/phungvandat/identity-service/model/domain"
-	"github.com/phungvandat/identity-service/util/engine"
+	"github.com/phungvandat/clean-architecture/model/domain"
+	"github.com/phungvandat/clean-architecture/util/engine"
 )
 
 // Repository is interface for user repository

@@ -8,7 +8,7 @@ import (
 	"strconv"
 
 	"github.com/go-chi/chi"
-	"github.com/phungvandat/identity-service/model/request"
+	"github.com/phungvandat/clean-architecture/model/request"
 )
 
 // FindByIDRequest to decode get userID from param URL
