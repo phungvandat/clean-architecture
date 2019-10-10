@@ -1,7 +1,7 @@
 package service
 
 import (
-	"github.com/phungvandat/identity-service/service/user"
+	"github.com/phungvandat/clean-architecture/service/user"
 )
 
 type Service struct {

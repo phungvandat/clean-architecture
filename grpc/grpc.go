@@ -3,10 +3,10 @@ package gprc
 import (
 	"github.com/go-kit/kit/log"
 	grpcTransport "github.com/go-kit/kit/transport/grpc"
-	"github.com/phungvandat/identity-service/endpoints"
-	"github.com/phungvandat/identity-service/grpc/options"
-	userproto "github.com/phungvandat/identity-service/grpc/proto/user"
-	userServer "github.com/phungvandat/identity-service/grpc/server/user"
+	"github.com/phungvandat/clean-architecture/endpoints"
+	"github.com/phungvandat/clean-architecture/grpc/options"
+	userproto "github.com/phungvandat/clean-architecture/grpc/proto/user"
+	userServer "github.com/phungvandat/clean-architecture/grpc/server/user"
 	"google.golang.org/grpc"
 )
 

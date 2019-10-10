@@ -6,10 +6,10 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-kit/kit/log"
 	httpTransport "github.com/go-kit/kit/transport/http"
-	"github.com/phungvandat/identity-service/endpoints"
-	"github.com/phungvandat/identity-service/http/encode"
-	"github.com/phungvandat/identity-service/http/options"
-	userRoute "github.com/phungvandat/identity-service/http/route/user"
+	"github.com/phungvandat/clean-architecture/endpoints"
+	"github.com/phungvandat/clean-architecture/http/encode"
+	"github.com/phungvandat/clean-architecture/http/options"
+	userRoute "github.com/phungvandat/clean-architecture/http/route/user"
 	"github.com/rs/cors"
 )
 

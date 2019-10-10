@@ -5,10 +5,10 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/phungvandat/identity-service/model/domain"
-	mongoConfig "github.com/phungvandat/identity-service/util/config/db/mongo"
-	"github.com/phungvandat/identity-service/util/constants"
-	"github.com/phungvandat/identity-service/util/errors"
+	"github.com/phungvandat/clean-architecture/model/domain"
+	mongoConfig "github.com/phungvandat/clean-architecture/util/config/db/mongo"
+	"github.com/phungvandat/clean-architecture/util/constants"
+	"github.com/phungvandat/clean-architecture/util/errors"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 

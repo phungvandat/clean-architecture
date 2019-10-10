@@ -3,9 +3,9 @@ package user
 import (
 	"github.com/go-chi/chi"
 	httptransport "github.com/go-kit/kit/transport/http"
-	"github.com/phungvandat/identity-service/endpoints"
-	userDecode "github.com/phungvandat/identity-service/http/decode/user"
-	"github.com/phungvandat/identity-service/http/encode"
+	"github.com/phungvandat/clean-architecture/endpoints"
+	userDecode "github.com/phungvandat/clean-architecture/http/decode/user"
+	"github.com/phungvandat/clean-architecture/http/encode"
 )
 
 // UserRoute route

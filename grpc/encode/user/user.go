@@ -3,8 +3,8 @@ package user
 import (
 	"context"
 
-	userproto "github.com/phungvandat/identity-service/grpc/proto/user"
-	"github.com/phungvandat/identity-service/model/response"
+	userproto "github.com/phungvandat/clean-architecture/grpc/proto/user"
+	"github.com/phungvandat/clean-architecture/model/response"
 )
 
 func FindByID(_ context.Context, grpcRes interface{}) (interface{}, error) {

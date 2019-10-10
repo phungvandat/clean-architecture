@@ -4,10 +4,10 @@ import (
 	"context"
 
 	grpcTransport "github.com/go-kit/kit/transport/grpc"
-	"github.com/phungvandat/identity-service/endpoints"
-	userDecode "github.com/phungvandat/identity-service/grpc/decode/user"
-	userEncode "github.com/phungvandat/identity-service/grpc/encode/user"
-	userproto "github.com/phungvandat/identity-service/grpc/proto/user"
+	"github.com/phungvandat/clean-architecture/endpoints"
+	userDecode "github.com/phungvandat/clean-architecture/grpc/decode/user"
+	userEncode "github.com/phungvandat/clean-architecture/grpc/encode/user"
+	userproto "github.com/phungvandat/clean-architecture/grpc/proto/user"
 )
 
 type userServer struct {
