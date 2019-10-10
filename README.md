@@ -1,4 +1,6 @@
-# identity-service
+# CLEAN ARCHITECTURE
+
+![clean architecture](https://github.com/phungvandat/clean-architecture/images/clean-arch.png)
 
 # HOW TO SETUP DB
 `docker-compose -f docker-compose-local.yaml up -d`
