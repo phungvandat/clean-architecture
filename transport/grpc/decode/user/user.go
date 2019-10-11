@@ -3,7 +3,7 @@ package user
 import (
 	"context"
 
-	userproto "github.com/phungvandat/clean-architecture/grpc/proto/user"
+	userproto "github.com/phungvandat/clean-architecture/transport/grpc/proto/user"
 	"github.com/phungvandat/clean-architecture/model/request"
 )
 

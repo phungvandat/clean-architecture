@@ -5,9 +5,9 @@ import (
 
 	grpcTransport "github.com/go-kit/kit/transport/grpc"
 	"github.com/phungvandat/clean-architecture/endpoints"
-	userDecode "github.com/phungvandat/clean-architecture/grpc/decode/user"
-	userEncode "github.com/phungvandat/clean-architecture/grpc/encode/user"
-	userproto "github.com/phungvandat/clean-architecture/grpc/proto/user"
+	userDecode "github.com/phungvandat/clean-architecture/transport/grpc/decode/user"
+	userEncode "github.com/phungvandat/clean-architecture/transport/grpc/encode/user"
+	userproto "github.com/phungvandat/clean-architecture/transport/grpc/proto/user"
 )
 
 type userServer struct {
