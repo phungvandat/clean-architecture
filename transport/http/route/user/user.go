@@ -4,8 +4,8 @@ import (
 	"github.com/go-chi/chi"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/phungvandat/clean-architecture/endpoints"
-	userDecode "github.com/phungvandat/clean-architecture/http/decode/user"
-	"github.com/phungvandat/clean-architecture/http/encode"
+	userDecode "github.com/phungvandat/clean-architecture/transport/http/decode/user"
+	"github.com/phungvandat/clean-architecture/transport/http/encode"
 )
 
 // UserRoute route

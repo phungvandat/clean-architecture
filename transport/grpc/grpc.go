@@ -4,9 +4,9 @@ import (
 	"github.com/go-kit/kit/log"
 	grpcTransport "github.com/go-kit/kit/transport/grpc"
 	"github.com/phungvandat/clean-architecture/endpoints"
-	"github.com/phungvandat/clean-architecture/grpc/options"
-	userproto "github.com/phungvandat/clean-architecture/grpc/proto/user"
-	userServer "github.com/phungvandat/clean-architecture/grpc/server/user"
+	"github.com/phungvandat/clean-architecture/transport/grpc/options"
+	userproto "github.com/phungvandat/clean-architecture/transport/grpc/proto/user"
+	userServer "github.com/phungvandat/clean-architecture/transport/grpc/server/user"
 	"google.golang.org/grpc"
 )
 

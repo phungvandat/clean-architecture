@@ -7,9 +7,9 @@ import (
 	"github.com/go-kit/kit/log"
 	httpTransport "github.com/go-kit/kit/transport/http"
 	"github.com/phungvandat/clean-architecture/endpoints"
-	"github.com/phungvandat/clean-architecture/http/encode"
-	"github.com/phungvandat/clean-architecture/http/options"
-	userRoute "github.com/phungvandat/clean-architecture/http/route/user"
+	"github.com/phungvandat/clean-architecture/transport/http/encode"
+	"github.com/phungvandat/clean-architecture/transport/http/options"
+	userRoute "github.com/phungvandat/clean-architecture/transport/http/route/user"
 	"github.com/rs/cors"
 )
 
@@ -28,7 +28,10 @@ func NewHTTPHandler(
 	r.Use(cors.Handler)
 
 	options := []httpTransport.ServerOption{
-		httpTransport.ServerBefore(options.LogRequestInfo(logger)),
+		httpTransport.ServerBefore(
+			options.LogRequestInfo(logger),
+			options.VerifyToken,
+		),
 		httpTransport.ServerErrorLogger(logger),
 		httpTransport.ServerErrorEncoder(encode.EncodeError),
 	}

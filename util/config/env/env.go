@@ -19,3 +19,7 @@ func GetMogoDBName() string {
 func GetGRPCPortEnv() string {
 	return os.Getenv("GRPC_PORT")
 }
+
+func GetJWTSerectKeyEnv() string {
+	return os.Getenv("JWT_SECRET_KEY")
+}
