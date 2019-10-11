@@ -74,3 +74,45 @@ func Test_validationMiddleware_FindByID(t *testing.T) {
 		})
 	}
 }
+
+func TestAddTranslateQuery(t *testing.T) {
+	usecaseMock := new(UsecaseMock)
+	res := &response.TestAddTranslateQuery{}
+	usecaseMock.On("TestAddTranslateQuery", mock.Anything, mock.Anything).Return(res, nil)
+
+	type args struct {
+		ctx context.Context
+		req request.TestAddTranslateQuery
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *response.TestAddTranslateQuery
+		wantErr error
+	}{
+		{
+			name: "Valid",
+			args: args{
+				ctx: context.TODO(),
+				req: request.TestAddTranslateQuery{},
+			},
+			want:    res,
+			wantErr: nil,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			mw := validationMiddleware{
+				Service: usecaseMock,
+			}
+			got, err := mw.TestAddTranslateQuery(tt.args.ctx, tt.args.req)
+			if (err != nil) && err != tt.wantErr {
+				t.Errorf("validationMiddleware.TestAddTranslateQuery() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("validationMiddleware.TestAddTranslateQuery() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
