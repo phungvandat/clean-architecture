@@ -2,16 +2,41 @@ package main
 
 import (
 	"context"
+	"crypto/tls"
+	"crypto/x509"
 	"fmt"
 	"log"
+	"os"
 
+	"github.com/joho/godotenv"
 	"github.com/phungvandat/clean-architecture/client/grpc-test/user"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 	"google.golang.org/grpc/metadata"
 )
 
 func main() {
-	conn, err := grpc.Dial("localhost:4001", grpc.WithInsecure())
+
+	if os.Getenv("ENV") != "production" {
+		err := godotenv.Load()
+		if err != nil {
+			panic(fmt.Sprintf("failed to load .env by error: %v", err))
+		}
+	}
+
+	var dialOption grpc.DialOption = grpc.WithInsecure()
+
+	// Create the client TLS credentials
+	if os.Getenv("ENV") == "secure-grpc" {
+		cp := x509.NewCertPool()
+		if !cp.AppendCertsFromPEM([]byte(os.Getenv("CA_PEM"))) {
+			fmt.Errorf("credentials: failed to append certificates")
+		}
+		creds := credentials.NewTLS(&tls.Config{ServerName: os.Getenv("GRPC_SERVER_ADDR"), RootCAs: cp})
+		dialOption = grpc.WithTransportCredentials(creds)
+	}
+
+	conn, err := grpc.Dial(os.Getenv("GRPC_SERVER_ADDR"), dialOption)
 	if err != nil {
 		log.Fatalf("Did not connect: %v", err)
 	}

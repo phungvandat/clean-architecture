@@ -8,3 +8,7 @@ dev:
 
 test:
 	go test ./...
+
+secure-grpc:
+	go mod tidy
+	ENV=secure-grpc go run cmd/server/main.go

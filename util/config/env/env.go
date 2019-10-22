@@ -23,3 +23,11 @@ func GetGRPCPortEnv() string {
 func GetJWTSerectKeyEnv() string {
 	return os.Getenv("JWT_SECRET_KEY")
 }
+
+func GetServerKey() string {
+	return os.Getenv("SERVER_KEY")
+}
+
+func GetServerPem() string {
+	return os.Getenv("SERVER_PEM")
+}

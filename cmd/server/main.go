@@ -9,6 +9,8 @@ import (
 	"syscall"
 	"time"
 
+	"crypto/tls"
+
 	"github.com/go-kit/kit/log"
 	"github.com/joho/godotenv"
 	"github.com/phungvandat/clean-architecture/endpoints"
@@ -21,11 +23,12 @@ import (
 	mongoDB "github.com/phungvandat/clean-architecture/util/config/db/mongo"
 	envConfig "github.com/phungvandat/clean-architecture/util/config/env"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials"
 )
 
 func main() {
 	var err error
-	if os.Getenv("ENV") == "local" {
+	if os.Getenv("ENV") != "production" {
 		err = godotenv.Load()
 		if err != nil {
 			panic(fmt.Sprintf("failed to load .env by error: %v", err))
@@ -103,8 +106,21 @@ func main() {
 	if envConfig.GetGRPCPortEnv() != "" {
 		portGRPC = envConfig.GetGRPCPortEnv()
 	}
+
+	// Create an array of gRPC options with the credentials
+	opts := []grpc.ServerOption{}
+
+	if os.Getenv("ENV") == "secure-grpc" {
+		// Create the TLS credentials
+		creds, err := tls.X509KeyPair([]byte(envConfig.GetServerPem()), []byte(envConfig.GetServerKey()))
+		if err != nil {
+			logger.Log("could not load TLS keys", err)
+		}
+		opts = append(opts, grpc.Creds(credentials.NewServerTLSFromCert(&creds)))
+	}
+
 	var (
-		grpcServer = grpc.NewServer()
+		grpcServer = grpc.NewServer(opts...)
 		grpcAddr   = fmt.Sprintf(":%v", portGRPC)
 	)
 	serviceGrpc.NewGRPCHandler(
