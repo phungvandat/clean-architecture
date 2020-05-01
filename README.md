@@ -17,5 +17,5 @@
 # HOW TO GEN PROTOC
 - `protoc --go_out=plugins=grpc:. grpc/proto/user/user.proto`
 
-# HOW TO GEN CERT 
-- `openssl req -newkey rsa:2048 -new -nodes -x509 -days 3650 -keyout cert/server.key -out cert/server.pem`
+# HOW TO GEN SSL/TLS CERT 
+- `cat gen_certs.sh.example > gen_certs.sh`

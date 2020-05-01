@@ -1,6 +1,7 @@
 # .env file
+gen_certs.sh
 .env
 /client/grpc-test/.env
 
 # cert folder
-cert/
+certs/

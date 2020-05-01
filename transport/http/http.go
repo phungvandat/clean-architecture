@@ -13,8 +13,8 @@ import (
 	"github.com/rs/cors"
 )
 
-// NewHTTPHandler func
-func NewHTTPHandler(
+// NewHttpHandler func
+func NewHttpHandler(
 	endpoints endpoints.Endpoints,
 	logger log.Logger,
 ) http.Handler {

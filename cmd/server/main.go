@@ -28,20 +28,13 @@ import (
 
 func main() {
 	var err error
-	if os.Getenv("ENV") != "production" {
+	var idProduction = os.Getenv("ENV") == "production"
+	if !idProduction {
 		err = godotenv.Load()
 		if err != nil {
 			panic(fmt.Sprintf("failed to load .env by error: %v", err))
 		}
 	}
-
-	// Setup addr
-	httpPort := "3000"
-	if envConfig.GetHTTPPortEnv() != "" {
-		httpPort = envConfig.GetHTTPPortEnv()
-	}
-
-	httpAddr := fmt.Sprintf(":%v", httpPort)
 
 	// Setup log
 	var logger log.Logger
@@ -86,64 +79,85 @@ func main() {
 
 	endpoints := endpoints.MakeServerEndpoints(s)
 
-	var h http.Handler
+	// setup http
+	httpPort := "3000"
+	if envConfig.GetHttpPortEnv() != "" {
+		httpPort = envConfig.GetHttpPortEnv()
+	}
+	httpAddr := fmt.Sprintf(":%v", httpPort)
+
+	var httpHandler http.Handler
 	{
-		h = serviceHttp.NewHTTPHandler(
+		httpHandler = serviceHttp.NewHttpHandler(
 			endpoints,
 			logger,
 		)
 	}
 
-	errs := make(chan error)
-	go func() {
-		ch := make(chan os.Signal)
-		signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
-		errs <- fmt.Errorf("%s", <-ch)
-	}()
-
-	go func() {
-		logger.Log("transport", "HTTP", "addr", httpAddr)
-		errs <- http.ListenAndServe(httpAddr, h)
-
-	}()
-
-	// grpc server
-	portGRPC := "4001"
-	if envConfig.GetGRPCPortEnv() != "" {
-		portGRPC = envConfig.GetGRPCPortEnv()
+	httpListener, err := net.Listen("tcp", httpAddr)
+	if err != nil {
+		panic(fmt.Sprintf("Create http listener failed by error: %v", err))
 	}
 
-	// Create an array of gRPC options with the credentials
+	// setup grpc
+	portGRPC := "4001"
+	if envConfig.GetGrpcPortEnv() != "" {
+		portGRPC = envConfig.GetGrpcPortEnv()
+	}
+	grpcAddr := fmt.Sprintf(":%v", portGRPC)
+
 	opts := []grpc.ServerOption{}
 
-	if os.Getenv("ENV") == "secure-grpc" {
+	if os.Getenv("ENV") == "tls-secure" || idProduction {
 		// Create the TLS credentials
 		creds, err := tls.X509KeyPair([]byte(envConfig.GetServerCRT()), []byte(envConfig.GetServerKey()))
 		if err != nil {
 			logger.Log("could not load TLS keys", err)
 		}
+		httpTLSConfig := &tls.Config{
+			Certificates: []tls.Certificate{creds},
+		}
+
+		httpListener = tls.NewListener(httpListener, httpTLSConfig)
+
 		opts = append(opts, grpc.Creds(credentials.NewServerTLSFromCert(&creds)))
 	}
 
 	var (
+		httpServer = http.Server{
+			Handler: httpHandler,
+		}
+
 		grpcServer = grpc.NewServer(opts...)
-		grpcAddr   = fmt.Sprintf(":%v", portGRPC)
 	)
-	serviceGrpc.NewGRPCHandler(
+
+	serviceGrpc.NewGrpcHandler(
 		endpoints,
 		logger,
 		grpcServer,
 	)
 
+	errChn := make(chan error)
+	go func() {
+		ch := make(chan os.Signal)
+		signal.Notify(ch, syscall.SIGINT, syscall.SIGTERM)
+		errChn <- fmt.Errorf("%s", <-ch)
+	}()
+
+	go func() {
+		logger.Log("transport", "HTTP", "addr", httpAddr)
+		errChn <- httpServer.Serve(httpListener)
+	}()
+
 	go func() {
 		lis, err := net.Listen("tcp", grpcAddr)
 		defer lis.Close()
 		if err != nil {
-			errs <- err
+			errChn <- err
 		}
 		logger.Log("transport", "GRPC", "addr", grpcAddr)
-		errs <- grpcServer.Serve(lis)
+		errChn <- grpcServer.Serve(lis)
 	}()
 
-	logger.Log("exit", <-errs)
+	logger.Log("exit", <-errChn)
 }

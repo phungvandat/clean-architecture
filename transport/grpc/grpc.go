@@ -10,7 +10,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-func NewGRPCHandler(
+func NewGrpcHandler(
 	endpoints endpoints.Endpoints,
 	logger log.Logger,
 	grpcServer *grpc.Server,

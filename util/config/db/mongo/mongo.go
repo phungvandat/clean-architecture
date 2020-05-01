@@ -36,6 +36,6 @@ func NewDB(dbName string, uri string) (*mongo.Database, func()) {
 			log.Println("Failed to close DB by error: ", err)
 			return
 		}
-		fmt.Println("Closed DB")
+		fmt.Println("Closed connection DB")
 	}
 }
