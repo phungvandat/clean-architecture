@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/go-kit/kit/endpoint"
-	userReq "github.com/phungvandat/clean-architecture/model/request"
+	userReq "github.com/phungvandat/clean-architecture/model/request/user"
 	"github.com/phungvandat/clean-architecture/service"
 )
 
+// MakeFindByIDEndpoint function return endpoint of find user by id
 func MakeFindByIDEndpoint(s service.Service) endpoint.Endpoint {
 	return func(ctx context.Context, request interface{}) (interface{}, error) {
 		req := request.(userReq.FindByID)
@@ -17,17 +18,6 @@ func MakeFindByIDEndpoint(s service.Service) endpoint.Endpoint {
 			return nil, err
 		}
 
-		return res, nil
-	}
-}
-
-func MakeTestAddTranslateQuery(s service.Service) endpoint.Endpoint {
-	return func(ctx context.Context, request interface{}) (interface{}, error) {
-		req := request.(userReq.TestAddTranslateQuery)
-		res, err := s.UserService.TestAddTranslateQuery(ctx, req)
-		if err != nil {
-			return nil, err
-		}
 		return res, nil
 	}
 }

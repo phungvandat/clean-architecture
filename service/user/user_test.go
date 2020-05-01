@@ -1,4 +1,4 @@
-package usecase
+package user
 
 import (
 	"context"
@@ -6,51 +6,55 @@ import (
 	"testing"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
-	"github.com/phungvandat/clean-architecture/model/request"
-	"github.com/phungvandat/clean-architecture/model/response"
-	userRepo "github.com/phungvandat/clean-architecture/service/user/repository"
+	userReq "github.com/phungvandat/clean-architecture/model/request/user"
+	userRes "github.com/phungvandat/clean-architecture/model/response/user"
+	repo "github.com/phungvandat/clean-architecture/repository"
+	userRepo "github.com/phungvandat/clean-architecture/repository/user"
 	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func Test_userUsecase_FindByID(t *testing.T) {
 	userRepoMock := new(userRepo.RepositoryMock)
-	userRes := &domain.User{
+	user := &domain.User{
 		ID: primitive.NewObjectID(),
 	}
-	res := &response.FindByID{
-		User: userRes,
+	findByIDres := &userRes.FindByID{
+		User: user,
 	}
-	userRepoMock.On("FindByID", mock.Anything, mock.Anything).Return(userRes, nil)
+	userRepoMock.On("FindByID", mock.Anything, mock.Anything).Return(user, nil)
+	repoMock := repo.NewRepositoryMock(repo.RepositoryMock{
+		User: userRepoMock,
+	})
 
 	type args struct {
 		ctx context.Context
-		req request.FindByID
+		req userReq.FindByID
 	}
 	tests := []struct {
 		name    string
 		args    args
-		want    *response.FindByID
+		want    *userRes.FindByID
 		wantErr error
 	}{
 		{
 			name: "Find user by ID success",
 			args: args{
 				ctx: context.TODO(),
-				req: request.FindByID{
-					UserID: userRes.ID.Hex(),
+				req: userReq.FindByID{
+					UserID: user.ID.String(),
 				},
 			},
-			want:    res,
+			want:    findByIDres,
 			wantErr: nil,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			useCase := &userUsecase{
-				userRepo: userRepoMock,
+			userSvc := &userService{
+				repo: repoMock,
 			}
-			got, err := useCase.FindByID(tt.args.ctx, tt.args.req)
+			got, err := userSvc.FindByID(tt.args.ctx, tt.args.req)
 			if (err != nil) && err != tt.wantErr {
 				t.Errorf("userUsecase.FindByID() error = %v, wantErr %v", err, tt.wantErr)
 				return

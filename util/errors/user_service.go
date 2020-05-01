@@ -5,37 +5,10 @@ import (
 )
 
 var (
-	UserIDIsRequiredError      = userIDIsRequiredError{}
-	UserNotExistError          = userNotExistError{}
-	IncorrectTypeOfUserIDError = incorrectTypeOfUserIDError{}
+	// UserIDIsRequiredError is missing user id error
+	UserIDIsRequiredError = newCustomErr("User ID is required", http.StatusBadRequest)
+	// UserNotExistError is user not exist error
+	UserNotExistError = newCustomErr("User not exist", http.StatusBadRequest)
+	// IncorrectTypeOfUserIDError is incorrect type of user id error
+	IncorrectTypeOfUserIDError = newCustomErr("Incorrect type of user ID", http.StatusBadRequest)
 )
-
-type userIDIsRequiredError struct{}
-
-func (userIDIsRequiredError) Error() string {
-	return "User ID is required"
-}
-
-func (userIDIsRequiredError) StatusCode() int {
-	return http.StatusBadRequest
-}
-
-type userNotExistError struct{}
-
-func (userNotExistError) Error() string {
-	return "User not exist"
-}
-
-func (userNotExistError) StatusCode() int {
-	return http.StatusBadRequest
-}
-
-type incorrectTypeOfUserIDError struct{}
-
-func (incorrectTypeOfUserIDError) Error() string {
-	return "Incorrect type of user ID"
-}
-
-func (incorrectTypeOfUserIDError) StatusCode() int {
-	return http.StatusBadRequest
-}

@@ -14,10 +14,10 @@ import (
 	"github.com/go-kit/kit/log"
 	"github.com/joho/godotenv"
 	"github.com/phungvandat/clean-architecture/endpoints"
+	repo "github.com/phungvandat/clean-architecture/repository"
+	userRepo "github.com/phungvandat/clean-architecture/repository/user"
 	"github.com/phungvandat/clean-architecture/service"
 	userSvc "github.com/phungvandat/clean-architecture/service/user"
-	userRepo "github.com/phungvandat/clean-architecture/service/user/repository"
-	userUseCase "github.com/phungvandat/clean-architecture/service/user/usecase"
 	serviceGrpc "github.com/phungvandat/clean-architecture/transport/grpc"
 	serviceHttp "github.com/phungvandat/clean-architecture/transport/http"
 	mongoDB "github.com/phungvandat/clean-architecture/util/config/db/mongo"
@@ -36,12 +36,12 @@ func main() {
 	}
 
 	// Setup addr
-	port := "3000"
-	if envConfig.GetPortEnv() != "" {
-		port = envConfig.GetPortEnv()
+	httpPort := "3000"
+	if envConfig.GetHTTPPortEnv() != "" {
+		httpPort = envConfig.GetHTTPPortEnv()
 	}
 
-	httpAddr := fmt.Sprintf(":%v", port)
+	httpAddr := fmt.Sprintf(":%v", httpPort)
 
 	// Setup log
 	var logger log.Logger
@@ -61,15 +61,21 @@ func main() {
 		time.Local = loc
 	}
 
+	// Setup repository
+	var (
+		mongoDB, closeMongoDB = mongoDB.NewDB(envConfig.GetMogoDBName(), envConfig.GetMongoURL())
+		userRepo              = userRepo.NewUserRepo(mongoDB)
+		repo                  = repo.Repository{
+			User: userRepo,
+		}
+	)
+
 	// Setup service
 	var (
-		mongoDB, closeMongoDB = mongoDB.NewDB(envConfig.GetMogoDBName(), envConfig.GetMongoURI())
-
 		// user service
-		userRepo    = userRepo.NewUserRepo(mongoDB)
 		userService = service.Compose(
-			userUseCase.NewUserUseCase(userRepo),
-			userUseCase.ValidationMiddleware(),
+			userSvc.NewUserService(repo),
+			userSvc.ValidationMiddleware(),
 		).(userSvc.Service)
 
 		s = service.Service{
@@ -112,7 +118,7 @@ func main() {
 
 	if os.Getenv("ENV") == "secure-grpc" {
 		// Create the TLS credentials
-		creds, err := tls.X509KeyPair([]byte(envConfig.GetServerPem()), []byte(envConfig.GetServerKey()))
+		creds, err := tls.X509KeyPair([]byte(envConfig.GetServerCRT()), []byte(envConfig.GetServerKey()))
 		if err != nil {
 			logger.Log("could not load TLS keys", err)
 		}

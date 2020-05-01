@@ -2,9 +2,5 @@
 .env
 /client/grpc-test/.env
 
-# go module
-go.mod
-go.sum
-
 # cert folder
 cert/

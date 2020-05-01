@@ -13,6 +13,7 @@ import (
 	"github.com/rs/cors"
 )
 
+// NewHTTPHandler func
 func NewHTTPHandler(
 	endpoints endpoints.Endpoints,
 	logger log.Logger,
@@ -44,7 +45,7 @@ func NewHTTPHandler(
 			options...,
 		).ServeHTTP)
 
-	r.Route("/v1", func(r chi.Router) {
+	r.Route("/v0", func(r chi.Router) {
 		r.Route("/users", userRoute.UserRoute(endpoints, options))
 	})
 

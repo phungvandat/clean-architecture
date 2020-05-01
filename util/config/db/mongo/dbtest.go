@@ -16,6 +16,7 @@ const (
 	dbName  = "test"
 )
 
+// CreateTestDatabase function create database connection for testing
 func CreateTestDatabase(t *testing.T) (*mongo.Database, func()) {
 	testURI := fmt.Sprintf("%s", mongURI)
 	testDBName := fmt.Sprintf("%s", dbName)
