@@ -9,6 +9,6 @@ dev:
 test:
 	go test ./...
 
-secure-grpc:
+tls-secure:
 	go mod tidy
-	ENV=secure-grpc go run cmd/server/main.go
+	ENV=tls-secure go run cmd/server/main.go

@@ -4,8 +4,8 @@ import (
 	"os"
 )
 
-// GetHTTPPortEnv function get http port from environment
-func GetHTTPPortEnv() string {
+// GetHttpPortEnv function get http port from environment
+func GetHttpPortEnv() string {
 	return os.Getenv("HTTP_PORT")
 }
 
@@ -19,8 +19,8 @@ func GetMogoDBName() string {
 	return os.Getenv("MONGO_DB_NAME")
 }
 
-// GetGRPCPortEnv function get grpc port from environment
-func GetGRPCPortEnv() string {
+// GetGrpcPortEnv function get grpc port from environment
+func GetGrpcPortEnv() string {
 	return os.Getenv("GRPC_PORT")
 }
 
