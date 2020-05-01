@@ -12,3 +12,6 @@ test:
 tls-secure:
 	go mod tidy
 	ENV=tls-secure go run cmd/server/main.go
+
+docker-image:
+	docker build -t clearn-architecture-go-image .
