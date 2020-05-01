@@ -1,38 +1,35 @@
-package repository
+package user
 
 import (
 	"context"
-	"encoding/json"
-	"fmt"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
 	"github.com/phungvandat/clean-architecture/util/constants"
-	"github.com/phungvandat/clean-architecture/util/engine"
 	"github.com/phungvandat/clean-architecture/util/errors"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 	"go.mongodb.org/mongo-driver/mongo"
 )
 
-type mongoUserRepo struct {
+type userRepo struct {
 	mongoDB *mongo.Database
 }
 
-// NewMongoUserRepo create a new user repo
+// NewUserRepo create a new user repo
 func NewUserRepo(mongoDB *mongo.Database) Repository {
-	return &mongoUserRepo{
+	return &userRepo{
 		mongoDB: mongoDB,
 	}
 }
 
-func (repo *mongoUserRepo) FindByID(ctx context.Context, id string) (*domain.User, error) {
+// FindByID function handles find user with id condition from repository
+func (repo *userRepo) FindByID(ctx context.Context, id string) (*domain.User, error) {
 	user := &domain.User{}
 	userCollection := repo.mongoDB.Collection(constants.MongoUserCollection)
 	objectID, _ := primitive.ObjectIDFromHex(id)
 	filter := bson.D{
 		{"_id", objectID},
 	}
-
 	result := userCollection.FindOne(ctx, filter)
 
 	if result.Err() != nil {
@@ -49,28 +46,4 @@ func (repo *mongoUserRepo) FindByID(ctx context.Context, id string) (*domain.Use
 	}
 
 	return user, nil
-}
-
-func (repo *mongoUserRepo) TestAddTranslateQuery(ctx context.Context, query *engine.Query) ([]*domain.User, error) {
-	users := []*domain.User{}
-	userCollection := repo.mongoDB.Collection(constants.MongoUserCollection)
-
-	filter := engine.TranslateQueryToMongoFilter(query)
-	x, _ := json.Marshal(filter)
-	fmt.Println(string(x))
-	cursors, err := userCollection.Find(ctx, filter)
-
-	if err != nil {
-		return nil, err
-	}
-
-	for cursors.Next(ctx) {
-		user := &domain.User{}
-		err = cursors.Decode(user)
-		if err != nil {
-			return nil, err
-		}
-		users = append(users, user)
-	}
-	return users, nil
 }

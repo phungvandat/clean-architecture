@@ -21,11 +21,5 @@ func UserRoute(
 			encode.EncodeResponse,
 			options...,
 		).ServeHTTP)
-		r.Get("/test", httptransport.NewServer(
-			endpoints.UserEndpoint.TestAddTranslateQuery,
-			userDecode.TestAddTranslateQueryRequest,
-			encode.EncodeResponse,
-			options...,
-		).ServeHTTP)
 	}
 }

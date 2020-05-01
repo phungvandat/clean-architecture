@@ -10,6 +10,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
+// NewDB func return a mongo connection
 func NewDB(dbName string, uri string) (*mongo.Database, func()) {
 	clientOptions := options.Client().ApplyURI(uri)
 	ctx := context.TODO()
@@ -18,6 +19,13 @@ func NewDB(dbName string, uri string) (*mongo.Database, func()) {
 	if err != nil {
 		panic(err)
 	}
+
+	err = client.Ping(ctx, nil)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("Connected db")
 
 	db := client.Database(dbName)
 
