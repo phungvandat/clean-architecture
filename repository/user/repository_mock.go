@@ -4,33 +4,20 @@ import (
 	"context"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
-	"github.com/stretchr/testify/mock"
 )
+
+// Make sure RepositoryMock implement Repository interface
+var _ Repository = &RepositoryMock{}
 
 // RepositoryMock struct
 type RepositoryMock struct {
-	mock.Mock
+	FindByIDFunc func(ctx context.Context, id string) (*domain.User, error)
 }
 
 // FindByID func
 func (rm *RepositoryMock) FindByID(ctx context.Context, id string) (*domain.User, error) {
-	args := rm.Called(ctx, id)
-
-	var r0 *domain.User
-	if rf, ok := args.Get(0).(func(context.Context, string) *domain.User); ok {
-		r0 = rf(ctx, id)
-	} else {
-		if args.Get(0) != nil {
-			r0 = args.Get(0).(*domain.User)
-		}
+	if rm.FindByIDFunc == nil {
+		panic("RepositoryMock not declare FindByID function")
 	}
-
-	var r1 error
-	if rf, ok := args.Get(1).(func(context.Context, string) error); ok {
-		r1 = rf(ctx, id)
-	} else {
-		r1 = args.Error(1)
-	}
-
-	return r0, r1
+	return rm.FindByIDFunc(ctx, id)
 }

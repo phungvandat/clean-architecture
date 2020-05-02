@@ -10,19 +10,21 @@ import (
 	userRes "github.com/phungvandat/clean-architecture/model/response/user"
 	repo "github.com/phungvandat/clean-architecture/repository"
 	userRepo "github.com/phungvandat/clean-architecture/repository/user"
-	"github.com/stretchr/testify/mock"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
 
 func Test_userUsecase_FindByID(t *testing.T) {
-	userRepoMock := new(userRepo.RepositoryMock)
 	user := &domain.User{
 		ID: primitive.NewObjectID(),
 	}
 	findByIDres := &userRes.FindByID{
 		User: user,
 	}
-	userRepoMock.On("FindByID", mock.Anything, mock.Anything).Return(user, nil)
+	userRepoMock := &userRepo.RepositoryMock{
+		FindByIDFunc: func(ctx context.Context, id string) (*domain.User, error) {
+			return user, nil
+		},
+	}
 	repoMock := repo.NewRepositoryMock(repo.RepositoryMock{
 		User: userRepoMock,
 	})
