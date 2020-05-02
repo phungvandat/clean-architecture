@@ -8,13 +8,15 @@ import (
 	userReq "github.com/phungvandat/clean-architecture/model/request/user"
 	userRes "github.com/phungvandat/clean-architecture/model/response/user"
 	"github.com/phungvandat/clean-architecture/util/errors"
-	"github.com/stretchr/testify/mock"
 )
 
 func Test_validationMiddleware_FindByID(t *testing.T) {
-	usecaseMock := new(UserMock)
 	useRes := &userRes.FindByID{}
-	usecaseMock.On("FindByID", mock.Anything, mock.Anything).Return(useRes, nil)
+	userSvcMock := &ServiceMock{
+		FindByIDFunc: func(ctx context.Context, req userReq.FindByID) (*userRes.FindByID, error) {
+			return useRes, nil
+		},
+	}
 
 	type args struct {
 		ctx context.Context
@@ -61,7 +63,7 @@ func Test_validationMiddleware_FindByID(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			mw := validationMiddleware{
-				Service: usecaseMock,
+				Service: userSvcMock,
 			}
 			got, err := mw.FindByID(tt.args.ctx, tt.args.req)
 			if (err != nil) && err != tt.wantErr {
