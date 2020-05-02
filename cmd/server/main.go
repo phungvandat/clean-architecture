@@ -28,8 +28,8 @@ import (
 
 func main() {
 	var err error
-	var idProduction = os.Getenv("ENV") == "production"
-	if !idProduction {
+	var isProduction = os.Getenv("ENV") == "production"
+	if !isProduction {
 		err = godotenv.Load()
 		if err != nil {
 			panic(fmt.Sprintf("failed to load .env by error: %v", err))
@@ -108,7 +108,7 @@ func main() {
 
 	opts := []grpc.ServerOption{}
 
-	if os.Getenv("ENV") == "tls-secure" || idProduction {
+	if os.Getenv("ENV") == "tls-secure" || isProduction {
 		// Create the TLS credentials
 		creds, err := tls.X509KeyPair([]byte(envConfig.GetServerCRT()), []byte(envConfig.GetServerKey()))
 		if err != nil {
