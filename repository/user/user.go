@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
+	userInput "github.com/phungvandat/clean-architecture/model/repository/user"
 	"github.com/phungvandat/clean-architecture/util/constants"
 	"github.com/phungvandat/clean-architecture/util/errors"
 	"go.mongodb.org/mongo-driver/bson"
@@ -46,4 +47,39 @@ func (repo *userRepo) FindByID(ctx context.Context, id string) (*domain.User, er
 	}
 
 	return user, nil
+}
+
+// Find function handles find users from repository with conditions
+func (repo *userRepo) Find(ctx context.Context, conditions userInput.FindConditions) ([]*domain.User, error) {
+	var (
+		userCollection = repo.mongoDB.Collection(constants.MongoUserCollection)
+		users          = []*domain.User{}
+	)
+
+	matchMap := bson.M{}
+	if conditions.Fullname != "" {
+		matchMap["fullname"] = conditions.Fullname
+	}
+
+	matchPl := bson.M{"$match": matchMap}
+
+	pipeline := []bson.M{
+		matchPl,
+	}
+
+	cursor, err := userCollection.Aggregate(ctx, pipeline)
+	if err != nil {
+		return nil, err
+	}
+
+	for cursor.Next(ctx) {
+		user := &domain.User{}
+		err = cursor.Decode(user)
+		if err != nil {
+			return nil, err
+		}
+		users = append(users, user)
+	}
+
+	return users, nil
 }

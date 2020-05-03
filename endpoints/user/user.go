@@ -21,3 +21,17 @@ func MakeFindByIDEndpoint(s service.Service) endpoint.Endpoint {
 		return res, nil
 	}
 }
+
+// MakeFindEndpoint function return endpoint of find user
+func MakeFindEndpoint(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(userReq.Find)
+		res, err := s.UserService.Find(ctx, req)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return res, nil
+	}
+}
