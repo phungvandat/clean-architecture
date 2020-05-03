@@ -11,6 +11,7 @@ import (
 )
 
 func Test_validationMiddleware_FindByID(t *testing.T) {
+	t.Parallel()
 	useRes := &userRes.FindByID{}
 	userSvcMock := &ServiceMock{
 		FindByIDFunc: func(ctx context.Context, req userReq.FindByID) (*userRes.FindByID, error) {

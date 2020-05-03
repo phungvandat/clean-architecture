@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
+	userInput "github.com/phungvandat/clean-architecture/model/repository/user"
 	userReq "github.com/phungvandat/clean-architecture/model/request/user"
 	userRes "github.com/phungvandat/clean-architecture/model/response/user"
 	repo "github.com/phungvandat/clean-architecture/repository"
@@ -14,6 +15,7 @@ import (
 )
 
 func Test_userUsecase_FindByID(t *testing.T) {
+	t.Parallel()
 	user := &domain.User{
 		ID: primitive.NewObjectID(),
 	}
@@ -63,6 +65,45 @@ func Test_userUsecase_FindByID(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("userUsecase.FindByID() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_userService_Find(t *testing.T) {
+	t.Parallel()
+	userRepoMock := &userRepo.RepositoryMock{
+		FindFunc: func(ctx context.Context, conditions userInput.FindConditions) ([]*domain.User, error) {
+			return []*domain.User{}, nil
+		},
+	}
+	repoMock := repo.NewRepositoryMock(repo.RepositoryMock{
+		User: userRepoMock,
+	})
+	type args struct {
+		ctx context.Context
+		req userReq.Find
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *userRes.Find
+		wantErr error
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &userService{
+				repo: repoMock,
+			}
+			got, err := s.Find(tt.args.ctx, tt.args.req)
+			if err != nil && err != tt.wantErr {
+				t.Errorf("userService.Find() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("userService.Find() = %v, want %v", got, tt.want)
 			}
 		})
 	}

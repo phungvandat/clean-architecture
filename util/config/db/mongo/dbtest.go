@@ -3,8 +3,11 @@ package mongo
 import (
 	"context"
 	"fmt"
+	"math/rand"
 	"os"
+	"strconv"
 	"testing"
+	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
@@ -18,8 +21,10 @@ const (
 
 // CreateTestDatabase function create database connection for testing
 func CreateTestDatabase(t *testing.T) (*mongo.Database, func()) {
+	rand.Seed(time.Now().UnixNano())
+
 	testURI := fmt.Sprintf("%s", mongURI)
-	testDBName := fmt.Sprintf("%s", dbName)
+	testDBName := fmt.Sprintf("%s-%s", dbName, strconv.FormatInt(rand.Int63(), 10))
 
 	if os.Getenv("MONGO_TESTING_URI") != "" {
 		testURI = os.Getenv("MONGO_TESTING_URI")

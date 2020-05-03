@@ -21,5 +21,12 @@ func UserRoute(
 			encode.EncodeResponse,
 			options...,
 		).ServeHTTP)
+		// Find
+		r.Get("/", httptransport.NewServer(
+			endpoints.UserEndpoint.Find,
+			userDecode.FindRequest,
+			encode.EncodeResponse,
+			options...,
+		).ServeHTTP)
 	}
 }
