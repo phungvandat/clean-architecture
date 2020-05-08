@@ -1,0 +1,42 @@
+version: "3"
+services:
+  mongo1:
+    container_name: mongo1
+    image: mongo
+    ports:
+      - 27018:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "ca" ]
+    depends_on: 
+      - mongo2
+      - mongo3
+
+  mongo2:
+    container_name: mongo2
+    image: mongo
+    ports:
+    - 27019:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "ca" ]
+
+  mongo3:
+    hostname: mongo3
+    container_name: mongo3
+    image: mongo
+    ports:
+    - 27010:27017
+    restart: always
+    entrypoint: [ "/usr/bin/mongod", "--bind_ip_all", "--replSet", "ca" ]
+
+  setup-rs:
+    image: mongo
+    volumes:
+      - ./setup-rs-mongo-script.sh:/setup-rs-mongo-script.sh
+    environment: 
+      - MONGO1=mongo1
+      - MONGO2=mongo2
+      - MONGO3=mongo3
+    entrypoint: ["/setup-rs-mongo-script.sh"]
+    depends_on: 
+      - mongo1
+  

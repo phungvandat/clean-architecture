@@ -35,3 +35,17 @@ func MakeFindEndpoint(s service.Service) endpoint.Endpoint {
 		return res, nil
 	}
 }
+
+// MakeCreateEndpoint function return endpoint of create user
+func MakeCreateEndpoint(s service.Service) endpoint.Endpoint {
+	return func(ctx context.Context, request interface{}) (interface{}, error) {
+		req := request.(userReq.Create)
+		res, err := s.UserService.Create(ctx, req)
+
+		if err != nil {
+			return nil, err
+		}
+
+		return res, nil
+	}
+}

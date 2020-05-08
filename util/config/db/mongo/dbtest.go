@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	mongURI = "mongodb://localhost:27017"
+	mongURL = "mongodb://localhost:27018/?connect=direct"
 	dbName  = "test"
 )
 
@@ -23,7 +23,7 @@ const (
 func CreateTestDatabase(t *testing.T) (*mongo.Database, func()) {
 	rand.Seed(time.Now().UnixNano())
 
-	testURI := fmt.Sprintf("%s", mongURI)
+	testURI := fmt.Sprintf("%s", mongURL)
 	testDBName := fmt.Sprintf("%s-%s", dbName, strconv.FormatInt(rand.Int63(), 10))
 
 	if os.Getenv("MONGO_TESTING_URI") != "" {

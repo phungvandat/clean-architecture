@@ -5,3 +5,5 @@ gen_certs.sh
 
 # cert folder
 certs/
+
+docker-compose.yaml

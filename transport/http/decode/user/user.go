@@ -2,6 +2,7 @@ package user
 
 import (
 	"context"
+	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi"
@@ -22,6 +23,18 @@ func FindRequest(_ context.Context, r *http.Request) (interface{}, error) {
 
 	if len(qValues["fullname"]) > 0 {
 		reqBody.Fullname = qValues["fullname"][0]
+	}
+
+	return reqBody, nil
+}
+
+// CreateRequest to decode data
+func CreateRequest(_ context.Context, r *http.Request) (interface{}, error) {
+	reqBody := userReq.Create{}
+
+	err := json.NewDecoder(r.Body).Decode(&reqBody)
+	if err != nil {
+		return nil, err
 	}
 
 	return reqBody, nil
