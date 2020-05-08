@@ -11,4 +11,5 @@ import (
 type Service interface {
 	FindByID(ctx context.Context, req userReq.FindByID) (*userRes.FindByID, error)
 	Find(ctx context.Context, req userReq.Find) (*userRes.Find, error)
+	Create(ctx context.Context, req userReq.Create) (*userRes.Create, error)
 }

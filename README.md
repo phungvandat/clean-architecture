@@ -9,6 +9,7 @@
 ### First
 - `make init`
 ### Next
+- `make setup-env`
 - `make dev`
 
 # HOW TO TEST

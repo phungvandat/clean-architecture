@@ -4,8 +4,10 @@ import (
 	"context"
 	"reflect"
 	"testing"
+	"time"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
+	"github.com/phungvandat/clean-architecture/model/repository"
 	userInput "github.com/phungvandat/clean-architecture/model/repository/user"
 	mongoConfig "github.com/phungvandat/clean-architecture/util/config/db/mongo"
 	"github.com/phungvandat/clean-architecture/util/constants"
@@ -168,4 +170,53 @@ func Test_userRepo_Find(t *testing.T) {
 		})
 	}
 
+}
+
+func Test_userRepo_Create(t *testing.T) {
+	t.Parallel()
+	dbTest, cleanup := mongoConfig.CreateTestDatabase(t)
+	defer cleanup()
+
+	user := &domain.User{
+		ID:        primitive.NewObjectID(),
+		CreatedAt: time.Now(),
+		UpdatedAt: time.Now(),
+		Username:  "ca",
+	}
+
+	type args struct {
+		ctx     context.Context
+		user    *domain.User
+		options []*repository.RepoOptions
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *domain.User
+		wantErr error
+	}{
+		{
+			name: "Create user success",
+			args: args{
+				ctx:  context.TODO(),
+				user: user,
+			},
+			want: user,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			repo := &userRepo{
+				mongoDB: dbTest,
+			}
+			got, err := repo.Create(tt.args.ctx, tt.args.user, tt.args.options...)
+			if err != nil && err != tt.wantErr {
+				t.Errorf("userRepo.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("userRepo.Create() = %v, want %v", got, tt.want)
+			}
+		})
+	}
 }

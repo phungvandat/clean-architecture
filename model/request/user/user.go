@@ -9,3 +9,8 @@ type FindByID struct {
 type Find struct {
 	Fullname string `json:"fullname"`
 }
+
+// Create struct
+type Create struct {
+	Fullname string `json:"fullname"`
+}

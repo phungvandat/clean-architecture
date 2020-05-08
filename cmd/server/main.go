@@ -20,8 +20,10 @@ import (
 	userSvc "github.com/phungvandat/clean-architecture/service/user"
 	serviceGrpc "github.com/phungvandat/clean-architecture/transport/grpc"
 	serviceHttp "github.com/phungvandat/clean-architecture/transport/http"
-	mongoDB "github.com/phungvandat/clean-architecture/util/config/db/mongo"
+	mongoConf "github.com/phungvandat/clean-architecture/util/config/db/mongo"
 	envConfig "github.com/phungvandat/clean-architecture/util/config/env"
+
+	"github.com/phungvandat/clean-architecture/util/transaction"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials"
 )
@@ -56,18 +58,20 @@ func main() {
 
 	// Setup repository
 	var (
-		mongoDB, closeMongoDB = mongoDB.NewDB(envConfig.GetMogoDBName(), envConfig.GetMongoURL())
+		mongoDB, closeMongoDB = mongoConf.NewDB(envConfig.GetMogoDBName(), envConfig.GetMongoURL())
 		userRepo              = userRepo.NewUserRepo(mongoDB)
 		repo                  = repo.Repository{
 			User: userRepo,
 		}
+		txer = transaction.NewTxer(mongoDB)
 	)
+	mongoConf.PrepareDB(mongoDB)
 
 	// Setup service
 	var (
 		// user service
 		userService = service.Compose(
-			userSvc.NewUserService(repo),
+			userSvc.NewUserService(repo, txer),
 			userSvc.ValidationMiddleware(),
 		).(userSvc.Service)
 

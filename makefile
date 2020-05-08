@@ -1,6 +1,10 @@
 init:
 	cat .env.example > .env
 	go mod init
+
+setup-env:
+	cat docker-compose-example.yaml > docker-compose.yaml
+	docker-compose up -d
 	
 dev:
 	go mod tidy

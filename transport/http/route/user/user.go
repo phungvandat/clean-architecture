@@ -2,6 +2,7 @@ package user
 
 import (
 	"github.com/go-chi/chi"
+	"github.com/go-kit/kit/transport/http"
 	httptransport "github.com/go-kit/kit/transport/http"
 	"github.com/phungvandat/clean-architecture/endpoints"
 	userDecode "github.com/phungvandat/clean-architecture/transport/http/decode/user"
@@ -25,6 +26,13 @@ func UserRoute(
 		r.Get("/", httptransport.NewServer(
 			endpoints.UserEndpoint.Find,
 			userDecode.FindRequest,
+			encode.EncodeResponse,
+			options...,
+		).ServeHTTP)
+		// Create
+		r.Post("/", http.NewServer(
+			endpoints.UserEndpoint.Create,
+			userDecode.CreateRequest,
 			encode.EncodeResponse,
 			options...,
 		).ServeHTTP)

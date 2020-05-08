@@ -45,3 +45,39 @@ func TestConvertTypeArrayToInterfaceArray(t *testing.T) {
 		})
 	}
 }
+
+func TestCheckArrIncludeItem(t *testing.T) {
+	type args struct {
+		arr  []interface{}
+		item interface{}
+	}
+	tests := []struct {
+		name string
+		args args
+		want bool
+	}{
+		{
+			name: "Check array include item success",
+			args: args{
+				arr:  []interface{}{"1", "2"},
+				item: "1",
+			},
+			want: true,
+		},
+		{
+			name: "Check array include item fail",
+			args: args{
+				arr:  []interface{}{"1", "3"},
+				item: "2",
+			},
+			want: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := CheckArrIncludeItem(tt.args.arr, tt.args.item); got != tt.want {
+				t.Errorf("CheckArrIncludeItem() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}

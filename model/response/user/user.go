@@ -13,3 +13,8 @@ type FindByID struct {
 type Find struct {
 	Users []*domain.User `json:"users"`
 }
+
+// Create struct
+type Create struct {
+	User *domain.User `json:"user"`
+}

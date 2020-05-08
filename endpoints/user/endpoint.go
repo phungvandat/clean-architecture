@@ -8,4 +8,5 @@ import (
 type UserEndpoint struct {
 	FindByID endpoint.Endpoint
 	Find     endpoint.Endpoint
+	Create   endpoint.Endpoint
 }

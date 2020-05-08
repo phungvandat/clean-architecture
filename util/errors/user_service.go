@@ -11,4 +11,6 @@ var (
 	UserNotExistError = newCustomErr("User not exist", http.StatusBadRequest)
 	// IncorrectTypeOfUserIDError is incorrect type of user id error
 	IncorrectTypeOfUserIDError = newCustomErr("Incorrect type of user ID", http.StatusBadRequest)
+	// UserFullnameIsRequiredError is missing user fullname error
+	UserFullnameIsRequiredError = newCustomErr("User fullname is required", http.StatusBadRequest)
 )

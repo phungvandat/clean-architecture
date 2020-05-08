@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
+	"github.com/phungvandat/clean-architecture/model/repository"
 	userInput "github.com/phungvandat/clean-architecture/model/repository/user"
 	"github.com/phungvandat/clean-architecture/util/constants"
 	"github.com/phungvandat/clean-architecture/util/errors"
@@ -24,7 +25,25 @@ func NewUserRepo(mongoDB *mongo.Database) Repository {
 }
 
 // FindByID function handles find user with id condition from repository
-func (repo *userRepo) FindByID(ctx context.Context, id string) (*domain.User, error) {
+func (repo *userRepo) FindByID(ctx context.Context, id string, options ...*repository.RepoOptions) (*domain.User, error) {
+	// xxx, _ := repo.mongoDB.Client().StartSession()
+	// e := xxx.StartTransaction()
+	// var a = struct {
+	// 	X int
+	// }{
+	// 	X: 1,
+	// }
+	// e = mongo.WithSession(ctx, xxx, func(sc mongo.SessionContext) error {
+	// 	fmt.Println("jsjs")
+	// 	_, err := repo.mongoDB.Collection("aaaa").InsertOne(ctx, a)
+	// 	fmt.Println(1, err)
+	// 	// err = xxx.CommitTransaction(ctx)
+	// 	fmt.Println(2, err)
+	// 	return nil
+	// })
+	// xxx.EndSession(ctx)
+	// log.Println(e)
+
 	user := &domain.User{}
 	userCollection := repo.mongoDB.Collection(constants.MongoUserCollection)
 	objectID, _ := primitive.ObjectIDFromHex(id)
@@ -50,7 +69,7 @@ func (repo *userRepo) FindByID(ctx context.Context, id string) (*domain.User, er
 }
 
 // Find function handles find users from repository with conditions
-func (repo *userRepo) Find(ctx context.Context, conditions userInput.FindConditions) ([]*domain.User, error) {
+func (repo *userRepo) Find(ctx context.Context, conditions userInput.FindConditions, options ...*repository.RepoOptions) ([]*domain.User, error) {
 	var (
 		userCollection = repo.mongoDB.Collection(constants.MongoUserCollection)
 		users          = []*domain.User{}
@@ -82,4 +101,21 @@ func (repo *userRepo) Find(ctx context.Context, conditions userInput.FindConditi
 	}
 
 	return users, nil
+}
+
+// Create function handles create user
+func (repo *userRepo) Create(ctx context.Context, user *domain.User, options ...*repository.RepoOptions) (*domain.User, error) {
+	repoOptions := repository.MergeRepoOptions(options...)
+	if repoOptions.TX != nil {
+		ctx = repoOptions.TX.SCtx
+	}
+
+	userCollection := repo.mongoDB.Collection(constants.MongoUserCollection)
+	insertResult, err := userCollection.InsertOne(ctx, user)
+	if err != nil {
+		return nil, err
+	}
+	user.ID = insertResult.InsertedID.(primitive.ObjectID)
+
+	return user, nil
 }

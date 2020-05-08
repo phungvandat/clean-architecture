@@ -20,6 +20,7 @@ func MakeServerEndpoints(s service.Service) Endpoints {
 		UserEndpoint: user.UserEndpoint{
 			FindByID: user.MakeFindByIDEndpoint(s),
 			Find:     user.MakeFindEndpoint(s),
+			Create:   user.MakeCreateEndpoint(s),
 		},
 	}
 }

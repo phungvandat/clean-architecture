@@ -6,6 +6,7 @@ import (
 	"testing"
 
 	"github.com/phungvandat/clean-architecture/model/domain"
+	repoOptions "github.com/phungvandat/clean-architecture/model/repository"
 	userInput "github.com/phungvandat/clean-architecture/model/repository/user"
 	userReq "github.com/phungvandat/clean-architecture/model/request/user"
 	userRes "github.com/phungvandat/clean-architecture/model/response/user"
@@ -23,7 +24,7 @@ func Test_userUsecase_FindByID(t *testing.T) {
 		User: user,
 	}
 	userRepoMock := &userRepo.RepositoryMock{
-		FindByIDFunc: func(ctx context.Context, id string) (*domain.User, error) {
+		FindByIDFunc: func(ctx context.Context, id string, options ...*repoOptions.RepoOptions) (*domain.User, error) {
 			return user, nil
 		},
 	}
@@ -73,7 +74,7 @@ func Test_userUsecase_FindByID(t *testing.T) {
 func Test_userService_Find(t *testing.T) {
 	t.Parallel()
 	userRepoMock := &userRepo.RepositoryMock{
-		FindFunc: func(ctx context.Context, conditions userInput.FindConditions) ([]*domain.User, error) {
+		FindFunc: func(ctx context.Context, conditions userInput.FindConditions, options ...*repoOptions.RepoOptions) ([]*domain.User, error) {
 			return []*domain.User{}, nil
 		},
 	}
@@ -104,6 +105,34 @@ func Test_userService_Find(t *testing.T) {
 			}
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("userService.Find() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func Test_userService_Create(t *testing.T) {
+	type args struct {
+		ctx context.Context
+		req userReq.Create
+	}
+	tests := []struct {
+		name    string
+		args    args
+		want    *userRes.Create
+		wantErr bool
+	}{
+		// TODO: Add test cases.
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			s := &userService{}
+			got, err := s.Create(tt.args.ctx, tt.args.req)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("userService.Create() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("userService.Create() = %v, want %v", got, tt.want)
 			}
 		})
 	}

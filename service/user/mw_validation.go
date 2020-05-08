@@ -34,3 +34,11 @@ func (mw validationMiddleware) FindByID(ctx context.Context, req userReq.FindByI
 
 	return mw.Service.FindByID(ctx, req)
 }
+
+// Create function handles check input data valid
+func (mw validationMiddleware) Create(ctx context.Context, req userReq.Create) (*userRes.Create, error) {
+	if req.Fullname == "" {
+		return nil, errors.UserFullnameIsRequiredError
+	}
+	return mw.Service.Create(ctx, req)
+}

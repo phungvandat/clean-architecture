@@ -30,3 +30,13 @@ func ConvertTypeArrayToInterfaceArray(input interface{}) ([]interface{}, error) 
 	}
 	return result, nil
 }
+
+// CheckArrIncludeItem function check if array include item value
+func CheckArrIncludeItem(arr []interface{}, item interface{}) bool {
+	for _, val := range arr {
+		if reflect.DeepEqual(val, item) {
+			return true
+		}
+	}
+	return false
+}
