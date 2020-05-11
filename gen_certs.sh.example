@@ -1,3 +1,4 @@
+# Removing (or commenting out) RANDFILE = $ENV::HOME/.rnd from /etc/ssl/openssl.cnf
 echo "Creating certs folder ..."
 mkdir certs && cd certs
 

@@ -24,11 +24,13 @@ mongo mongodb://${mongo1}:27017 <<EOF
             },
             {
                 "_id": 1,
-                "host": "${mongo2}:27017"
+                "host": "${mongo2}:27017",
+                "priority": 0
             },
             {
                 "_id": 2,
-                "host": "${mongo3}:27017"
+                "host": "${mongo3}:27017",
+                "priority": 0
             }
         ]
     };
