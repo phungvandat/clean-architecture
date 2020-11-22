@@ -26,24 +26,6 @@ func NewUserRepo(mongoDB *mongo.Database) Repository {
 
 // FindByID function handles find user with id condition from repository
 func (repo *userRepo) FindByID(ctx context.Context, id string, options ...*repository.RepoOptions) (*domain.User, error) {
-	// xxx, _ := repo.mongoDB.Client().StartSession()
-	// e := xxx.StartTransaction()
-	// var a = struct {
-	// 	X int
-	// }{
-	// 	X: 1,
-	// }
-	// e = mongo.WithSession(ctx, xxx, func(sc mongo.SessionContext) error {
-	// 	fmt.Println("jsjs")
-	// 	_, err := repo.mongoDB.Collection("aaaa").InsertOne(ctx, a)
-	// 	fmt.Println(1, err)
-	// 	// err = xxx.CommitTransaction(ctx)
-	// 	fmt.Println(2, err)
-	// 	return nil
-	// })
-	// xxx.EndSession(ctx)
-	// log.Println(e)
-
 	user := &domain.User{}
 	userCollection := repo.mongoDB.Collection(constants.MongoUserCollection)
 	objectID, _ := primitive.ObjectIDFromHex(id)
