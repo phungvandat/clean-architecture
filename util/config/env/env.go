@@ -25,7 +25,9 @@ func GetGrpcPortEnv() string {
 }
 
 // GetJWTSerectKeyEnv function get jwt serect key from environment
-func GetJWTSerectKeyEnv() string {
+var JWTSerectKeyEnv = getJWTSerectKeyEnv()
+
+func getJWTSerectKeyEnv() string {
 	return os.Getenv("JWT_SECRET_KEY")
 }
 

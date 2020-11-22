@@ -26,7 +26,7 @@ func VerifyToken(ctx context.Context, req *http.Request) context.Context {
 			if jwt.SigningMethodHS256 != token.Method {
 				return nil, errors.InvalidSigningAlgorithm
 			}
-			secret := env.GetJWTSerectKeyEnv()
+			secret := env.JWTSerectKeyEnv
 			return []byte(secret), nil
 		})
 

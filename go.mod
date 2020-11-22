@@ -9,6 +9,6 @@ require (
 	github.com/golang/protobuf v1.4.0
 	github.com/joho/godotenv v1.3.0
 	github.com/rs/cors v1.7.0
-	go.mongodb.org/mongo-driver v1.4.0-beta1.0.20200507220522-691b9dff3211
+	go.mongodb.org/mongo-driver v1.4.3
 	google.golang.org/grpc v1.29.1
 )
